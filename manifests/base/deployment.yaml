@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: datalake-query-ingester
-          image: "771301166455.dkr.ecr.us-west-2.amazonaws.com/datalake-query-ingester:latest"
+          image: "711570343235.dkr.ecr.us-west-2.amazonaws.com/datalake-query-ingester:latest"
           imagePullPolicy: Always
           env:
             - name: DATALAKEQUERYINGESTER_KAFKA_TOPIC
