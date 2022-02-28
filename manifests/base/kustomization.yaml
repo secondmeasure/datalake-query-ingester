@@ -9,5 +9,5 @@ resources:
 configMapGenerator:
   - name: datalake-query-ingester-configmap
     literals:
-      - DATALAKEQUERYINGESTER_KAFKA_TOPIC=datalake-query-ingester
-      - KAFKA_BROKERS=datalake-query-ingester-kafka-bootstrap:9092
+      - DATALAKEQUERYINGESTER_KAFKA_TOPIC=
+      - KAFKA_BROKERS=
