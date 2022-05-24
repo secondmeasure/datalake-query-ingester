@@ -41,12 +41,13 @@ async def healthy() -> HealthyResponse:
 
 @app.post("/add_query_ingest")
 async def add_query_ingest(request: Request, x_api_key: Any = X_API_KEY) -> dict[str, bool]:
+    logging.info(f"Received request {str(await request.body())}")
     return {"ok": add_query_ingest_impl(cast(str, x_api_key), await request.body())}
 
 
 @app.exception_handler(Exception)
 async def validation_exception_handler(_request: Request, exc: Exception) -> PlainTextResponse:
-    logging.exception("Exception  in requests: ", exc)
+    logging.exception("Exception in requests: ", exc)
     return PlainTextResponse("Something went wrong", status_code=500)
 
 
