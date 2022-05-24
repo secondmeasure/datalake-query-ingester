@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 
+import json
 import logging
 from typing import Any, cast
 
@@ -41,8 +42,18 @@ async def healthy() -> HealthyResponse:
 
 @app.post("/add_query_ingest")
 async def add_query_ingest(request: Request, x_api_key: Any = X_API_KEY) -> dict[str, bool]:
-    logging.info(f"Received request {str(await request.body())}")
-    return {"ok": add_query_ingest_impl(cast(str, x_api_key), await request.body())}
+    request_body = await request.body()
+    logging.debug(f"Received request {str(request_body)}")
+
+    # Remove info in request that is not used by consumer to reduce request size
+    request_body = json.loads(request_body.decode("utf-8"))
+    request_body.get("metadata", {}).pop("payload", None)
+    request_body.get("ioMetadata", {}).pop("connectorInfo", None)
+    request_body.get("statistics", {}).pop("operatorSummaries", None)
+    request_body = json.dumps(request_body).encode("utf-8")
+    logging.info(f"Pruned request {str(request_body)}")
+
+    return {"ok": add_query_ingest_impl(cast(str, x_api_key), request_body)}
 
 
 @app.exception_handler(Exception)
